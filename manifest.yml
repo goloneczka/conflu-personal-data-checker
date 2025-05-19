@@ -1,0 +1,62 @@
+modules:
+  confluence:globalPage:
+    - key: c-personal-data-checker-hello-world
+      resource: main
+      resolver:
+        function: resolver
+      title: c-personal-data-checker
+      route: hello-world
+  trigger:
+    - key: verify-doc-personal-data
+      function: hook-verify-document
+      events:
+        - avi:confluence:created:page
+        - avi:confluence:updated:page
+  function:
+    - key: resolver
+      handler: index.handler
+    - key: hook-verify-document
+      handler: index.runHookDocumentVerify
+resources:
+  - key: main
+    path: static/hello-world/build
+permissions:
+  scopes:
+    - read:confluence-content.summary
+    - read:page:confluence
+    - write:comment:confluence
+    - storage:app
+  content:
+    styles:
+      - "unsafe-inline"
+  external:
+    images:
+      - "*.atlassian.net"
+app:
+  runtime:
+    name: nodejs22.x
+  id: ari:cloud:ecosystem::app/b1593a97-8b90-489c-9da7-5ca8fb129e75
+  storage:
+    entities:
+      - name: confluence-page-validation-result
+        attributes:
+          confluencePageId:
+            type: string
+          status:
+            type: string
+          sendedCommentId:
+            type: string
+          comment:
+            type: string
+          version:
+            type: integer
+          markedAsFalsePositive:
+            type: any
+          validationResult:
+            type: any
+        indexes:
+          - name: by-version-per-confluence-page
+            partition:
+              - confluencePageId
+            range:
+              - version
