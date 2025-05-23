@@ -28,6 +28,7 @@ export const SSNTextChecker = async (text) => {
       foundSSNs.push(ssn);
     }
   }
+  console.log("matches", foundSSNs);
 
   return { checkerType: checkerOption.SSN, result: findWordsAround(text, foundSSNs) };
 };

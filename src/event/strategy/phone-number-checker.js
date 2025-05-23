@@ -10,7 +10,7 @@ export const phoneNumberTextChecker = async (text) => {
   const phoneRegex = /(?:\+|00)?\d{1,4}[\s\-]?\(?\d{1,4}\)?(?:[\s\-]?\d{2,5}){2,5}|\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{4}|\b\d{9,10}\b/g;
 
   const matches = text.match(phoneRegex);
-  if (!matches) return [];
+  if (!matches) return { checkerType: checkerOption.PHONE_NUMBER, result: [] };
 
   for (const match of matches) {
     const cleaned = match.trim();

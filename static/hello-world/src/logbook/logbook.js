@@ -52,7 +52,8 @@ export const LogBookContainer = () => {
             <th>Page ID</th>
             <th>Status</th>
             <th>Comment</th>
-            <th>Version</th>
+            <th>Script page Version</th>
+            <th>Page Version</th>
             <th>Timestamp</th>
             <th>Actions</th>
           </tr>
@@ -61,11 +62,12 @@ export const LogBookContainer = () => {
           {currentLogs.map((log) => (
             <tr key={log.id}>
               <td>{log.id}</td>
-              <td>{log.pageId}</td>
+              <td>{log.confluencePageId}</td>
               <td>{log.status}</td>
               <td>{log.comment}</td>
               <td>{log.version}</td>
-              <td>{log.timestamp}</td>
+              <td>{log.confluPageVersion}</td>
+              <td>{log.timestamp ? new Date(Number(log.timestamp)).toLocaleString() : ""}</td>
               <td>
                 {log.needAction ? (
                   <Button iconBefore={ShieldStrikethroughIcon} appearance="primary" onClick={() => handleLogClick(log.id)}>

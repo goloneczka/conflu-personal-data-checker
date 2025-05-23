@@ -5,7 +5,9 @@ export const bankCardTextChecker = async (text) => {
   const matches = [];
   const possibleNumbers = text.match(/(?:\d[\s-]?){13,19}/g); // Szukamy 13-19 cyfr z opcjonalnymi spacjami lub myślnikami
 
-  if (!possibleNumbers) return [];
+  if (!possibleNumbers) {
+    return { checkerType: checkerOption.BANK_CARD, result: [] };
+  }
 
   for (let raw of possibleNumbers) {
     const sanitized = raw.replace(/[^\d]/g, "");

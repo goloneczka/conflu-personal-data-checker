@@ -1,6 +1,6 @@
 import { createPageValidationHistory, fetchAllPageValidationHistory, fetchLastPageValidationHistory } from "./history-page-repository";
 
-export const createPageValidationNewResults = async (pageId, newValidationResults, commentResult, currentValidationForPage) => {
+export const createPageValidationNewResults = async (pageId, confluPageVersion, newValidationResults, commentResult, currentValidationForPage) => {
   const newStatus = newValidationResults.filter((item) => item.result.length).length ? "unsafePage" : "safePage";
 
   const newValidationResult = {
@@ -9,8 +9,9 @@ export const createPageValidationNewResults = async (pageId, newValidationResult
     sendedCommentId: commentResult || "null",
     validationResult: newValidationResults,
     markedAsFalsePositive: [],
-    comment: "null",
+    comment: newStatus === "unsafePage" ? "Action required" : "null",
     version: currentValidationForPage?.version + 1 || 1,
+    confluPageVersion: confluPageVersion,
   };
 
   return await createPageValidationHistory(generateSortableId(), newValidationResult);

@@ -12,7 +12,7 @@ export const getLogBooksForPage = async (context) => {
     ...item.value,
     timestamp: item.key.split("-")[0],
     id: item.key,
-    needAction: item.value.status === "unsafePage",
+    needAction: item.value.status === "unsafePage" && item.value.comment === "Action required",
   }));
 };
 
@@ -20,5 +20,10 @@ export const getLogBookById = async (context) => {
   const payload = context.payload;
   const row = await fetchLogHistoryPageById(payload.id);
   console.log("row", row);
-  return { ...row.value, id: row.key };
+  return {
+    ...row.value,
+    id: row.key,
+    timestamp: row.key.split("-")[0],
+    needAction: row.value.status === "unsafePage" && row.value.comment === "Action required",
+  };
 };

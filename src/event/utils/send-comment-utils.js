@@ -1,6 +1,6 @@
 export const prepareNewCommentIfNeccesary = (id, verifyResults, currentValidationForPage) => {
   let newCommentBody = null;
-  const isThereAnyUnsafeData = verifyResults.filter((item) => item.result.length).length;
+  const isThereAnyUnsafeData = verifyResults.filter((item) => item.result.length)?.length;
 
   if (isThereAnyUnsafeData && (!currentValidationForPage.status || currentValidationForPage.status === "safePage")) {
     newCommentBody = _createFooterComment(id);

@@ -36,7 +36,13 @@ export const runVerifyPageFacade = async (pageId) => {
   }
 
   // 4. update the page status in db
-  const updatedValidationForPage = await createPageValidationNewResults(pageId, verifyResults, newCommentResponseId, currentValidationForPage);
+  const updatedValidationForPage = await createPageValidationNewResults(
+    pageId,
+    pageRequestData.version.number,
+    verifyResults,
+    newCommentResponseId,
+    currentValidationForPage
+  );
 
   return true;
 };

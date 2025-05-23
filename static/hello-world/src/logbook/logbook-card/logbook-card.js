@@ -39,11 +39,11 @@ export const LogBookCard = () => {
           <tbody>
             <tr key={logbookData.id}>
               <td>{logbookData.id}</td>
-              <td>{logbookData.pageId}</td>
+              <td>{logbookData.confluencePageId}</td>
               <td>{logbookData.status}</td>
               <td>{logbookData.comment}</td>
               <td>{logbookData.version}</td>
-              <td>{logbookData.timestamp}</td>
+              <td>{log.timestamp ? new Date(Number(log.timestamp)).toLocaleString() : ""}</td>
             </tr>
           </tbody>
         </table>

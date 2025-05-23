@@ -17,7 +17,7 @@ const strategyMap = new Map([
   [checkerOption.PHONE_NUMBER, phoneNumberTextChecker],
 ]);
 
-export function runCheckersByParams(params, data) {
+export async function runCheckersByParams(params, data) {
   const promises = [];
   for (const [key, checker] of strategyMap.entries()) {
     if (params.includes(key)) {
