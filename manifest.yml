@@ -60,3 +60,27 @@ app:
               - confluencePageId
             range:
               - version
+      - name: confluence-page-validation-result-v2
+        attributes:
+          confluencePageId:
+            type: string
+          status:
+            type: string
+          comment:
+            type: string
+          stringTimestamp:
+            type: string
+          pageVersion:
+            type: integer
+          scriptRunVersion:
+            type: integer
+          markedAsFalsePositive:
+            type: any
+          validationResult:
+            type: any
+        indexes:
+          - name: by-version-per-confluence-page
+            partition:
+              - confluencePageId
+            range:
+              - version

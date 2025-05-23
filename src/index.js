@@ -1,13 +1,11 @@
 import Resolver from "@forge/resolver";
 import { runVerifyPageFacade } from "./event/event-core";
-import { getLogBooksForPage } from "./backend/logbook-use-case";
+import { getLogBookById, getLogBooksForPage } from "./backend/logbook-use-case";
 
 const resolver = new Resolver();
 
-resolver.define("getText", (req) => {
-  console.log(req);
-
-  return "Hello, world!";
+resolver.define("getLogbookDataById", async (context) => {
+  return await getLogBookById(context);
 });
 
 resolver.define("getLogBooksForPage", async (context) => {

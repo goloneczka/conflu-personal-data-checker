@@ -5,6 +5,7 @@ import { view } from "@forge/bridge";
 
 import Path from "./core/link/link-path";
 import { LogBookContainer } from "./logbook/logbook";
+import { LogBookCard } from "./logbook/logbook-card/logbook-card";
 
 function App() {
   const [history, setHistory] = useState(null);
@@ -44,6 +45,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Navigate to={Path.LOG_BOOK} />} />
             <Route path={Path.LOG_BOOK} element={<LogBookContainer />} />
+            <Route path={Path.LOG_BOOK_DETAILS} element={<LogBookCard />} />
           </Routes>
         </Router>
       ) : (

@@ -1,0 +1,27 @@
+.logbook-details-sections {
+    display: flex;
+    gap: 32px;
+    margin-top: 32px;
+    align-items: flex-start;
+}
+
+.logbook-details-sections > div {
+    flex: 1 1 0;
+    background: #f7f8fa;
+    border-radius: 10px;
+    padding: 18px 22px;
+    box-shadow: 0 2px 8px rgba(60, 72, 88, 0.06);
+    min-width: 300px;
+}
+
+.vulnerability-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 8px; 
+}
+
+/* Highlight row when button is hovered */
+.vulnerability-row:has(button:hover) {
+    background: #e0f2fe; }
