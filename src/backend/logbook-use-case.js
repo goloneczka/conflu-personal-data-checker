@@ -5,9 +5,9 @@ import { fetchLogsHistoryByPage } from "./db/logbook-repository";
 export const getLogBooksForPage = async (context) => {
   const payload = context.payload;
 
-  let historyLogsWrapper = await fetchLogsHistoryByPage(payload.size);
+  let historyLogsWrapper = await fetchLogsHistoryByPage(payload.size, payload.onlyActionNeeded);
   for (let i = 1; i < payload.page; i++) {
-    historyLogsWrapper = await fetchLogsHistoryByPage(payload.size, historyLogsWrapper.nextCursor);
+    historyLogsWrapper = await fetchLogsHistoryByPage(payload.size, payload.onlyActionNeeded, historyLogsWrapper.nextCursor);
   }
   console.log("historyLogsWrapper", historyLogsWrapper);
   return historyLogsWrapper.results.map((item) => ({
@@ -56,4 +56,16 @@ export const markAsFalsePositive = async (context) => {
     timestamp: newRow.key.split("-")[0],
     needAction: newRow.value.status === "unsafePage" && newRow.value.comment === "Action required",
   };
+};
+
+export const countAllLogBooks = async (context) => {
+  const payload = context.payload;
+
+  let historyLogsWrapper = await fetchLogsHistoryByPage(payload.size, payload.onlyActionNeeded);
+  let sumOfRows = historyLogsWrapper.results.length;
+  while (historyLogsWrapper.nextCursor) {
+    historyLogsWrapper = await fetchLogsHistoryByPage(payload.size, payload.onlyActionNeeded, historyLogsWrapper.nextCursor);
+    sumOfRows += historyLogsWrapper.results.length;
+  }
+  return parseInt(sumOfRows / payload.size) + 1;
 };

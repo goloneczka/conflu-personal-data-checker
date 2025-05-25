@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router";
 import Pagination from "@atlaskit/pagination";
 import Button from "@atlaskit/button/new";
 import ShieldStrikethroughIcon from "@atlaskit/icon/core/shield-strikethrough";
+import { Checkbox } from "@atlaskit/checkbox";
 
 import "./logbook.css";
 import Path from "../core/link/link-path";
@@ -11,27 +12,29 @@ import { invoke } from "@forge/bridge";
 
 export const LogBookContainer = () => {
   const logsPerPage = 5;
-
   const navigate = useNavigate();
   const location = useLocation();
 
   const [currentLogs, setCurrentLogs] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const page = params.get("page") || 1;
-    setCurrentPage(parseInt(page));
-  }, [location.search]);
+  // Always derive from URL
+  const params = new URLSearchParams(location.search);
+  const page = parseInt(params.get("page") || "1", 10);
+  const onlyActionNeeded = params.get("onlyActionNeeded") === "true";
 
+  // Update total pages when filter changes
   useEffect(() => {
-    invoke("getLogBooksForPage", { page: currentPage, size: logsPerPage }).then((logbooks) => {
-      setCurrentLogs(logbooks);
-    });
-  }, [currentPage]);
+    invoke("countAllLogBooks", { size: logsPerPage, onlyActionNeeded }).then(setTotalPages);
+  }, [logsPerPage, onlyActionNeeded]);
+
+  // Fetch logs when page or filter changes
+  useEffect(() => {
+    invoke("getLogBooksForPage", { page, size: logsPerPage, onlyActionNeeded }).then(setCurrentLogs);
+  }, [page, logsPerPage, onlyActionNeeded]);
 
   const handlePageChange = (_, newPage) => {
-    const params = new URLSearchParams({ page: newPage });
+    const params = new URLSearchParams({ page: newPage, onlyActionNeeded: onlyActionNeeded });
     navigate(`${Path.LOG_BOOK}?${params.toString()}`);
   };
 
@@ -40,10 +43,22 @@ export const LogBookContainer = () => {
     navigate(`${Path.LOG_BOOK_DETAILS}?${params.toString()}`);
   };
 
+  const onChangeChecbkoxActionOnly = (_) => {
+    const params = new URLSearchParams({ page: 1, onlyActionNeeded: !onlyActionNeeded });
+    navigate(`${Path.LOG_BOOK}?${params.toString()}`);
+  };
+
   return (
     <div>
       <h1>LogBook</h1>
       <p>This is the logbook page. You can view the history of your actions here.</p>
+
+      <div className="logbook-toolbar">
+        <div></div> {/* Empty div for left alignment, can be used for future controls */}
+        <div className="logbook-filter">
+          <Checkbox isChecked={onlyActionNeeded} label="only Action Needed" name="checkbox-action-needed" onChange={onChangeChecbkoxActionOnly} />
+        </div>
+      </div>
 
       <table className="logbook-table">
         <thead>
@@ -85,7 +100,7 @@ export const LogBookContainer = () => {
       </table>
 
       <div style={{ marginTop: 24, display: "flex", justifyContent: "center" }}>
-        <Pagination pages={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]} onChange={handlePageChange} />
+        <Pagination pages={Array.from({ length: totalPages }, (_, i) => i + 1)} onChange={handlePageChange} selectedIndex={page - 1} />
       </div>
     </div>
   );
