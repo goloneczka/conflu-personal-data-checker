@@ -1,6 +1,6 @@
 import Resolver from "@forge/resolver";
 import { runVerifyPageFacade } from "./event/event-core";
-import { getLogBookById, getLogBooksForPage } from "./backend/logbook-use-case";
+import { getLogBookById, getLogBooksForPage, markAsFalsePositive } from "./backend/logbook-use-case";
 
 const resolver = new Resolver();
 
@@ -10,6 +10,10 @@ resolver.define("getLogbookDataById", async (context) => {
 
 resolver.define("getLogBooksForPage", async (context) => {
   return await getLogBooksForPage(context);
+});
+
+resolver.define("markAsFalsePositive", async (context) => {
+  return await markAsFalsePositive(context);
 });
 
 export async function runHookDocumentVerify(event, context) {

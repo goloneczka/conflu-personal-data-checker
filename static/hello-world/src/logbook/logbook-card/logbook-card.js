@@ -10,6 +10,7 @@ export const LogBookCard = () => {
   const location = useLocation();
 
   const [logbookData, setlogbookData] = useState({});
+  const [areButtonsDisabled, setAreButtonsDisabled] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -18,6 +19,16 @@ export const LogBookCard = () => {
       setlogbookData(logbook);
     });
   }, [location.search]);
+
+  const markAsFalsePositive = async (checkerType, id) => {
+    setAreButtonsDisabled(true);
+    await invoke("markAsFalsePositive", { logbookId: logbookData.id, checkerType: checkerType, validationErrorIdPerCherkerType: id }).then(
+      (newLogBook) => {
+        setlogbookData(newLogBook);
+        setAreButtonsDisabled(false);
+      }
+    );
+  };
 
   return (
     <div>
@@ -43,7 +54,7 @@ export const LogBookCard = () => {
               <td>{logbookData.status}</td>
               <td>{logbookData.comment}</td>
               <td>{logbookData.version}</td>
-              <td>{log.timestamp ? new Date(Number(log.timestamp)).toLocaleString() : ""}</td>
+              <td>{logbookData.timestamp ? new Date(Number(logbookData.timestamp)).toLocaleString() : ""}</td>
             </tr>
           </tbody>
         </table>
@@ -61,7 +72,11 @@ export const LogBookCard = () => {
                   <p style={{ margin: 0 }}>
                     {validationError.wordsBefore} {validationError.val} {validationError.wordsAfter}
                   </p>
-                  <Button appearance="default"> MaFP </Button>
+                  {logbookData.needAction && (
+                    <Button appearance="default" onClick={() => markAsFalsePositive(validation.checkerType, idx)} isDisabled={areButtonsDisabled}>
+                      MaFP
+                    </Button>
+                  )}
                 </div>
               ))}
             </div>
@@ -69,13 +84,19 @@ export const LogBookCard = () => {
         </div>
 
         <div>
-          <h3>Marked as False Positive:</h3>
+          <h3>
+            Marked as False Positive: <h5>These values won;t be checked in future for this page</h5>
+          </h3>
           {logbookData.markedAsFalsePositive?.map((validation) => (
             <div key={validation.checkerType}>
-              <p>{validation.checkerType}</p>
+              <h5>{validation.checkerType}</h5>
 
               {validation.result.map((validationError, idx) => (
-                <span key={idx}>{validationError.val}</span>
+                <div key={idx} className="vulnerability-row">
+                  <p style={{ margin: 0 }}>
+                    {validationError.wordsBefore} {validationError.val} {validationError.wordsAfter}
+                  </p>
+                </div>
               ))}
             </div>
           ))}

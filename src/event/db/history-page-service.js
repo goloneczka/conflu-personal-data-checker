@@ -1,14 +1,21 @@
-import { createPageValidationHistory, fetchAllPageValidationHistory, fetchLastPageValidationHistory } from "./history-page-repository";
+import { sumValidationFalsePositive } from "../utils/validation-errors-helper-utils";
+import {
+  createPageValidationHistory,
+  deleteLogBookById,
+  fetchAllPageValidationHistory,
+  fetchLastPageValidationHistory,
+} from "./history-page-repository";
 
 export const createPageValidationNewResults = async (pageId, confluPageVersion, newValidationResults, commentResult, currentValidationForPage) => {
   const newStatus = newValidationResults.filter((item) => item.result.length).length ? "unsafePage" : "safePage";
+  const emptyMarkedAsFalsePositive = newValidationResults.map((item) => ({ checkerType: item.checkerType, result: [] }));
 
   const newValidationResult = {
     confluencePageId: pageId,
     status: newStatus,
     sendedCommentId: commentResult || "null",
     validationResult: newValidationResults,
-    markedAsFalsePositive: [],
+    markedAsFalsePositive: emptyMarkedAsFalsePositive,
     comment: newStatus === "unsafePage" ? "Action required" : "null",
     version: currentValidationForPage?.version + 1 || 1,
     confluPageVersion: confluPageVersion,
@@ -25,16 +32,23 @@ export const getLastValidationResults = async (pageId) => {
 };
 
 export const getAllMarkedAsFalsePositiveForPage = async (pageId) => {
-  const allMarkedAsFalsePositive = [];
+  let allMarkedAsFalsePositive = [];
   let pageHistoryWrapper = await fetchAllPageValidationHistory(pageId);
   allMarkedAsFalsePositive.push(...pageHistoryWrapper.results.map((item) => item.value.markedAsFalsePositive));
+
+  // ONLY FOR TESTING PURPOSES
+  // pageHistoryWrapper.results.forEach((item) => {
+  //   deleteLogBookById(item.key);
+  // });
+  // throw new Error("ONLY FOR TESTING PURPOSES - ALL LOGBOOKS DELETED");
 
   while (pageHistoryWrapper.nextCursor) {
     pageHistoryWrapper = await fetchAllPageValidationHistory(pageId, pageHistoryWrapper.nextCursor);
     allMarkedAsFalsePositive.push(...pageHistoryWrapper.results.map((item) => item.value.markedAsFalsePositive));
   }
 
-  return allMarkedAsFalsePositive;
+  // todo: sum in batch instead of in memory
+  return sumValidationFalsePositive(allMarkedAsFalsePositive);
 };
 
 function generateSortableId() {

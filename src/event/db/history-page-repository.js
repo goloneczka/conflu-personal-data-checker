@@ -2,7 +2,7 @@ import { kvs, Sort, WhereConditions } from "@forge/kvs";
 
 export const fetchAllPageValidationHistory = async (pageId, cursor) => {
   return await kvs
-    .entity("confluence-page-validation-result")
+    .entity("confluence-page-validation-result-v2")
     .query()
     .index("by-version-per-confluence-page", {
       partition: [pageId],
@@ -14,7 +14,7 @@ export const fetchAllPageValidationHistory = async (pageId, cursor) => {
 
 export const fetchLastPageValidationHistory = async (pageId) => {
   return await kvs
-    .entity("confluence-page-validation-result")
+    .entity("confluence-page-validation-result-v2")
     .query()
     .index("by-version-per-confluence-page", {
       partition: [pageId],
@@ -25,6 +25,9 @@ export const fetchLastPageValidationHistory = async (pageId) => {
 };
 
 export const createPageValidationHistory = async (newId, objectToSave) => {
-  console.log("newId", newId, objectToSave);
-  return await kvs.entity("confluence-page-validation-result").set(newId, objectToSave);
+  return await kvs.entity("confluence-page-validation-result-v2").set(newId, objectToSave);
+};
+
+export const deleteLogBookById = async (id) => {
+  return await kvs.entity("confluence-page-validation-result-v2").delete(id);
 };
