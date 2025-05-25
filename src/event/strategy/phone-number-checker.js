@@ -1,5 +1,5 @@
 import { checkerOption } from "../event-checker-strategy";
-import { findWordsAround } from "./shared/words-around-merger";
+import { findWordsAroundNew } from "./shared/words-around-merger";
 
 export const phoneNumberTextChecker = async (text) => {
   const foundPhones = [];
@@ -9,11 +9,11 @@ export const phoneNumberTextChecker = async (text) => {
   // - lokalne numery (NANP, Indie itd.) w różnych formatach
   const phoneRegex = /(?:\+|00)?\d{1,4}[\s\-]?\(?\d{1,4}\)?(?:[\s\-]?\d{2,5}){2,5}|\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{4}|\b\d{9,10}\b/g;
 
-  const matches = text.match(phoneRegex);
-  if (!matches) return { checkerType: checkerOption.PHONE_NUMBER, result: [] };
+  const matches = Array.from(text.matchAll(phoneRegex));
+  if (!matches.length) return { checkerType: checkerOption.PHONE_NUMBER, result: [] };
 
   for (const match of matches) {
-    const cleaned = match.trim();
+    const cleaned = match[0].trim();
 
     // Zamiana '00' na '+'
     let standardized = cleaned;
@@ -22,6 +22,7 @@ export const phoneNumberTextChecker = async (text) => {
     } else if (!standardized.startsWith("+")) {
       // Spróbuj dodać prefix jeśli możliwe
       const prefixes = ["1", "91", "86", "972", "44", "49", "33", "34", "61", "48", "31", "39"];
+
       for (const prefix of prefixes) {
         if (standardized.startsWith(prefix)) {
           standardized = "+" + standardized;
@@ -31,11 +32,10 @@ export const phoneNumberTextChecker = async (text) => {
     }
 
     if (validateInternationalPhone(standardized)) {
-      foundPhones.push(cleaned);
+      foundPhones.push({ match: cleaned, index: match.index });
     }
   }
-
-  return { checkerType: checkerOption.PHONE_NUMBER, result: findWordsAround(text, foundPhones) };
+  return { checkerType: checkerOption.PHONE_NUMBER, result: findWordsAroundNew(text, foundPhones) };
 };
 
 function validateInternationalPhone(number) {

@@ -2,7 +2,12 @@ import api, { route } from "@forge/api";
 import { checkerOption, runCheckersByParams } from "./event-checker-strategy";
 import { extractTextFromProseMirrorJSON } from "./utils/extract-text-utils";
 import { prepareNewCommentIfNeccesary } from "./utils/send-comment-utils";
-import { getLastValidationResults, createPageValidationNewResults, getAllMarkedAsFalsePositiveForPage } from "./db/history-page-service";
+import {
+  getLastValidationResults,
+  createPageValidationNewResults,
+  getAllMarkedAsFalsePositiveForPage,
+  updatePreviousPageValidationComment,
+} from "./db/history-page-service";
 import { substractValidationByFalsePositive } from "./utils/validation-errors-helper-utils";
 
 export const runVerifyPageFacade = async (pageId) => {
@@ -37,7 +42,7 @@ export const runVerifyPageFacade = async (pageId) => {
     newCommentResponseId = (await responseNewComment.json()).id;
   }
 
-  // 6. update the page status in db
+  // 6. create new history entry with the new validation results
   const updatedValidationForPage = await createPageValidationNewResults(
     pageId,
     pageRequestData.version.number,
@@ -46,5 +51,7 @@ export const runVerifyPageFacade = async (pageId) => {
     currentValidationForPage
   );
 
+  // 7.update previous validation comment
+  await updatePreviousPageValidationComment(currentValidationForPage.id);
   return true;
 };

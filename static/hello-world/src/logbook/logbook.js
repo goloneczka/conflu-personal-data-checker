@@ -64,7 +64,7 @@ export const LogBookContainer = () => {
               <td>{log.id}</td>
               <td>{log.confluencePageId}</td>
               <td>{log.status}</td>
-              <td>{log.comment}</td>
+              <td className="logbook-comment">{log.comment}</td>
               <td>{log.version}</td>
               <td>{log.confluPageVersion}</td>
               <td>{log.timestamp ? new Date(Number(log.timestamp)).toLocaleString() : ""}</td>

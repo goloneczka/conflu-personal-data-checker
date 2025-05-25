@@ -1,5 +1,5 @@
 import { checkerOption } from "../event-checker-strategy";
-import { findWordsAround } from "./shared/words-around-merger";
+import { findWordsAroundNew } from "./shared/words-around-merger";
 
 export const SSNTextChecker = async (text) => {
   const foundSSNs = [];
@@ -13,7 +13,7 @@ export const SSNTextChecker = async (text) => {
     const group = parseInt(groupStr, 10);
     const serial = parseInt(serialStr, 10);
     if (isValidSSN(area, group, serial)) {
-      foundSSNs.push(full);
+      foundSSNs.push({ match: full, index: match.index });
     }
   }
 
@@ -25,12 +25,11 @@ export const SSNTextChecker = async (text) => {
     const group = parseInt(ssn.substring(3, 5), 10);
     const serial = parseInt(ssn.substring(5, 9), 10);
     if (isValidSSN(area, group, serial)) {
-      foundSSNs.push(ssn);
+      foundSSNs.push({ match: full, index: match.index });
     }
   }
-  console.log("matches", foundSSNs);
 
-  return { checkerType: checkerOption.SSN, result: findWordsAround(text, foundSSNs) };
+  return { checkerType: checkerOption.SSN, result: findWordsAroundNew(text, foundSSNs) };
 };
 
 function isValidSSN(area, group, serial) {

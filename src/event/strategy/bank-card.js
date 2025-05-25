@@ -1,15 +1,19 @@
 import { checkerOption } from "../event-checker-strategy";
-import { findWordsAround } from "./shared/words-around-merger";
+import { findWordsAroundNew } from "./shared/words-around-merger";
 
 export const bankCardTextChecker = async (text) => {
   const matches = [];
-  const possibleNumbers = text.match(/(?:\d[\s-]?){13,19}/g); // Szukamy 13-19 cyfr z opcjonalnymi spacjami lub myślnikami
+
+  const regex = /(?:\d[\s-]?){13,19}/g; // Szukamy 13-19 cyfr z opcjonalnymi spacjami lub myślnikami
+  const possibleNumbers = Array.from(text.matchAll(regex));
 
   if (!possibleNumbers) {
     return { checkerType: checkerOption.BANK_CARD, result: [] };
   }
 
-  for (let raw of possibleNumbers) {
+  for (let match of possibleNumbers) {
+    const raw = match[0];
+    const index = match.index;
     const sanitized = raw.replace(/[^\d]/g, "");
 
     // Długość musi pasować
@@ -20,11 +24,11 @@ export const bankCardTextChecker = async (text) => {
 
     // Czy to Visa lub Mastercard?
     if (isVisa(sanitized) || isMastercard(sanitized)) {
-      matches.push(raw);
+      matches.push({ match: raw.trim(), index });
     }
   }
 
-  return { checkerType: checkerOption.BANK_CARD, result: findWordsAround(text, matches) };
+  return { checkerType: checkerOption.BANK_CARD, result: findWordsAroundNew(text, matches) };
 };
 
 function luhnCheck(number) {

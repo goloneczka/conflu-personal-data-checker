@@ -1,3 +1,4 @@
+import { fetchLogHistoryPageById, updateLogHistoryPage } from "../../core/db/page-validation-result";
 import { sumValidationFalsePositive } from "../utils/validation-errors-helper-utils";
 import {
   createPageValidationHistory,
@@ -16,7 +17,7 @@ export const createPageValidationNewResults = async (pageId, confluPageVersion, 
     sendedCommentId: commentResult || "null",
     validationResult: newValidationResults,
     markedAsFalsePositive: emptyMarkedAsFalsePositive,
-    comment: newStatus === "unsafePage" ? "Action required" : "null",
+    comment: newStatus === "unsafePage" ? "Action required" : "Looks Good",
     version: currentValidationForPage?.version + 1 || 1,
     confluPageVersion: confluPageVersion,
   };
@@ -28,7 +29,10 @@ export const createPageValidationNewResults = async (pageId, confluPageVersion, 
 export const getLastValidationResults = async (pageId) => {
   const pageHistoryWrapper = await fetchLastPageValidationHistory(pageId);
 
-  return pageHistoryWrapper?.value || {};
+  if (pageHistoryWrapper && pageHistoryWrapper.value) {
+    return { ...pageHistoryWrapper.value, id: pageHistoryWrapper.key };
+  }
+  return {};
 };
 
 export const getAllMarkedAsFalsePositiveForPage = async (pageId) => {
@@ -49,6 +53,17 @@ export const getAllMarkedAsFalsePositiveForPage = async (pageId) => {
 
   // todo: sum in batch instead of in memory
   return sumValidationFalsePositive(allMarkedAsFalsePositive);
+};
+
+export const updatePreviousPageValidationComment = async (previousValidationId) => {
+  if (!previousValidationId) {
+    return null;
+  }
+  const previousValidation = await fetchLogHistoryPageById(previousValidationId);
+  const row = previousValidation.value;
+
+  row.comment += ", new version available";
+  return await updateLogHistoryPage(previousValidationId, row);
 };
 
 function generateSortableId() {

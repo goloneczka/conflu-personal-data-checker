@@ -1,5 +1,6 @@
+import { fetchLogHistoryPageById, updateLogHistoryPage } from "../core/db/page-validation-result";
 import { runVerifyPageFacade } from "../event/event-core";
-import { fetchLogHistoryPageById, fetchLogsHistoryByPage, updateLogHistoryPage } from "./db/logbook-repository";
+import { fetchLogsHistoryByPage } from "./db/logbook-repository";
 
 export const getLogBooksForPage = async (context) => {
   const payload = context.payload;
