@@ -1,4 +1,5 @@
-import { fetchLogHistoryPageById, updateLogHistoryPage } from "../../core/db/page-validation-result";
+import { fetchLogHistoryPageById, updateLogHistoryPage } from "../../core/db/page-validation-result-repository";
+import { generateSortableId } from "../../core/db/sortable-id";
 import { sumValidationFalsePositive } from "../utils/validation-errors-helper-utils";
 import {
   createPageValidationHistory,
@@ -65,9 +66,3 @@ export const updatePreviousPageValidationComment = async (previousValidationId) 
   row.comment += ", new version available";
   return await updateLogHistoryPage(previousValidationId, row);
 };
-
-function generateSortableId() {
-  const timestamp = Date.now().toString(); // 13-digit milliseconds timestamp
-  const random = Math.random().toString(36).slice(2, 8); // 6-char random string
-  return `${timestamp}-${random}`;
-}

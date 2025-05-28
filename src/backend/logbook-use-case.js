@@ -1,4 +1,4 @@
-import { fetchLogHistoryPageById, updateLogHistoryPage } from "../core/db/page-validation-result";
+import { fetchLogHistoryPageById, updateLogHistoryPage } from "../core/db/page-validation-result-repository";
 import { runVerifyPageFacade } from "../event/event-core";
 import { fetchLogsHistoryByPage } from "./db/logbook-repository";
 
@@ -61,10 +61,10 @@ export const markAsFalsePositive = async (context) => {
 export const countAllLogBooks = async (context) => {
   const payload = context.payload;
 
-  let historyLogsWrapper = await fetchLogsHistoryByPage(payload.size, payload.onlyActionNeeded);
+  let historyLogsWrapper = await fetchLogsHistoryByPage(99, payload.onlyActionNeeded);
   let sumOfRows = historyLogsWrapper.results.length;
   while (historyLogsWrapper.nextCursor) {
-    historyLogsWrapper = await fetchLogsHistoryByPage(payload.size, payload.onlyActionNeeded, historyLogsWrapper.nextCursor);
+    historyLogsWrapper = await fetchLogsHistoryByPage(99, payload.onlyActionNeeded, historyLogsWrapper.nextCursor);
     sumOfRows += historyLogsWrapper.results.length;
   }
   return parseInt(sumOfRows / payload.size) + 1;

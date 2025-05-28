@@ -6,6 +6,8 @@ import { view } from "@forge/bridge";
 import Path from "./core/link/link-path";
 import { LogBookContainer } from "./logbook/logbook";
 import { LogBookCard } from "./logbook/logbook-card/logbook-card";
+import { Validator } from "./validator/validator";
+import { Acces } from "./core/acces/Acces";
 
 function App() {
   const [history, setHistory] = useState(null);
@@ -46,6 +48,8 @@ function App() {
             <Route path="/" element={<Navigate to={Path.LOG_BOOK} />} />
             <Route path={Path.LOG_BOOK} element={<LogBookContainer />} />
             <Route path={Path.LOG_BOOK_DETAILS} element={<LogBookCard />} />
+            <Route path={Path.VALIDATOR} element={<Validator />} />
+            <Route path={Path.ACCES} element={<Acces />} />
           </Routes>
         </Router>
       ) : (

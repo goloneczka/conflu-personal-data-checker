@@ -1,6 +1,8 @@
 import Resolver from "@forge/resolver";
 import { runVerifyPageFacade } from "./event/event-core";
 import { countAllLogBooks, getLogBookById, getLogBooksForPage, markAsFalsePositive } from "./backend/logbook-use-case";
+import { initializeStorage } from "./core/init-storage-service";
+import { fetchValidationTypes } from "./backend/validator-use-case";
 
 const resolver = new Resolver();
 
@@ -20,6 +22,10 @@ resolver.define("countAllLogBooks", async (context) => {
   return await countAllLogBooks(context);
 });
 
+resolver.define("fetchValidationTypes", async (context) => {
+  return await fetchValidationTypes(context);
+});
+
 export async function runHookDocumentVerify(event, context) {
   try {
     await runVerifyPageFacade(event?.content?.id);
@@ -29,5 +35,9 @@ export async function runHookDocumentVerify(event, context) {
   }
   return true;
 }
+
+export const runInstallationHook = (context) => {
+  initializeStorage();
+};
 
 export const handler = resolver.getDefinitions();

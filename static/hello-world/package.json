@@ -9,6 +9,7 @@
     "@atlaskit/css-reset": "^6.6.2",
     "@atlaskit/icon": "^26.1.1",
     "@atlaskit/pagination": "^16.1.1",
+    "@atlaskit/toggle": "^15.0.5",
     "@forge/bridge": "4.5.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

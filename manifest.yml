@@ -12,11 +12,17 @@ modules:
       events:
         - avi:confluence:created:page
         - avi:confluence:updated:page
+    - key: installation-app-handler
+      function: installation-func
+      events:
+        - avi:forge:installed:app
   function:
     - key: resolver
       handler: index.handler
     - key: hook-verify-document
       handler: index.runHookDocumentVerify
+    - key: installation-func
+      handler: index.runInstallationHook
 resources:
   - key: main
     path: static/hello-world/build
@@ -33,9 +39,6 @@ permissions:
     images:
       - "*.atlassian.net"
 app:
-  runtime:
-    name: nodejs22.x
-  id: ari:cloud:ecosystem::app/b1593a97-8b90-489c-9da7-5ca8fb129e75
   storage:
     entities:
       - name: confluence-page-validation-result
@@ -86,3 +89,18 @@ app:
               - confluencePageId
             range:
               - version
+      - name: validation-type
+        attributes:
+          name:
+            type: string
+          description:
+            type: string
+          active:
+            type: boolean
+      - name: admin-group
+        attributes:
+          name:
+            type: string
+  runtime:
+    name: nodejs22.x
+  id: ari:cloud:ecosystem::app/b1593a97-8b90-489c-9da7-5ca8fb129e75

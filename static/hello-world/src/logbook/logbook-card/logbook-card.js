@@ -43,7 +43,8 @@ export const LogBookCard = () => {
               <th>Page ID</th>
               <th>Status</th>
               <th>Comment</th>
-              <th>Version</th>
+              <th>Script page Version</th>
+              <th>Page Version</th>
               <th>Timestamp</th>
             </tr>
           </thead>
@@ -52,8 +53,9 @@ export const LogBookCard = () => {
               <td>{logbookData.id}</td>
               <td>{logbookData.confluencePageId}</td>
               <td>{logbookData.status}</td>
-              <td>{logbookData.comment}</td>
+              <td className="logbook-comment">{logbookData.comment}</td>
               <td>{logbookData.version}</td>
+              <td>{logbookData.confluPageVersion}</td>
               <td>{logbookData.timestamp ? new Date(Number(logbookData.timestamp)).toLocaleString() : ""}</td>
             </tr>
           </tbody>

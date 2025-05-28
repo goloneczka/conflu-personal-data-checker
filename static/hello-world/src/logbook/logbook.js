@@ -3,12 +3,13 @@ import { useLocation, useNavigate } from "react-router";
 
 import Pagination from "@atlaskit/pagination";
 import Button from "@atlaskit/button/new";
-import ShieldStrikethroughIcon from "@atlaskit/icon/core/shield-strikethrough";
 import { Checkbox } from "@atlaskit/checkbox";
+import ShieldStrikethroughIcon from "@atlaskit/icon/core/shield-strikethrough";
 
 import "./logbook.css";
 import Path from "../core/link/link-path";
 import { invoke } from "@forge/bridge";
+import { ButtonHeader } from "../core/header/button-header";
 
 export const LogBookContainer = () => {
   const logsPerPage = 5;
@@ -50,7 +51,7 @@ export const LogBookContainer = () => {
 
   return (
     <div>
-      <h1>LogBook</h1>
+      <ButtonHeader activeIndex={0} />
       <p>This is the logbook page. You can view the history of your actions here.</p>
 
       <div className="logbook-toolbar">
