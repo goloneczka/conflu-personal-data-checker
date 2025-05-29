@@ -9,6 +9,9 @@
     "eslint-plugin-react-hooks": "^4.6.0"
   },
   "dependencies": {
+    "@atlaskit/form": "^12.0.5",
+    "@atlaskit/select": "^20.6.1",
+    "@atlaskit/tag": "^14.0.9",
     "@forge/kvs": "^0.1.2",
     "@forge/resolver": "1.6.10"
   }

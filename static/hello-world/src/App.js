@@ -7,7 +7,7 @@ import Path from "./core/link/link-path";
 import { LogBookContainer } from "./logbook/logbook";
 import { LogBookCard } from "./logbook/logbook-card/logbook-card";
 import { Validator } from "./validator/validator";
-import { Acces } from "./core/acces/Acces";
+import { Acces } from "./acces/acces";
 
 function App() {
   const [history, setHistory] = useState(null);

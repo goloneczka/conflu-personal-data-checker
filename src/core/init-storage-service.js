@@ -1,3 +1,4 @@
+import { createActiveAdminGroup } from "./db/admin-groups-repository";
 import { generateSortableId } from "./db/sortable-id";
 import { createValidationType } from "./db/validation-type-repository";
 
@@ -34,14 +35,19 @@ const validators = [
   },
 ];
 
+const adminGroups = ["jira-admins", "org-admins", "system-administrators", "site-admins"];
+
 export const initializeStorage = async () => {
-  console.warn("Initializing storage service...");
+  console.log("Initializing storage service...");
   const promises = [];
   for (const validator of validators) {
     promises.push(createValidationType(generateSortableId(), validator));
   }
-  await Promise.all(promises);
-  console.log("All validation types initialized.");
-};
 
-//return [`jira-admins`, "org-admins", "system-administrators", "site-admins"];
+  for (const group of adminGroups) {
+    promises.push(createActiveAdminGroup(generateSortableId(), { name: group, canBeDeleted: false }));
+  }
+
+  await Promise.all(promises);
+  console.log("All validations & admin groups initialized., promises:", promises.length);
+};
