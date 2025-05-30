@@ -3,7 +3,14 @@ import { runVerifyPageFacade } from "./event/event-core";
 import { countAllLogBooks, getLogBookById, getLogBooksForPage, markAsFalsePositive } from "./backend/logbook-use-case";
 import { initializeStorage } from "./core/init-storage-service";
 import { fetchValidationTypes } from "./backend/validator-use-case";
-import { addAdminGroups, deleteAdminGroup, fetchAdminGroups, fetchAllAttlasianGroups } from "./backend/admin-group-use-case";
+import {
+  addAdminGroups,
+  deleteAdminGroup,
+  fetchAdminGroups,
+  fetchAllAttlasianGroups,
+  hasUserAdminAccess,
+  verifyIfAppInitialized,
+} from "./backend/admin-group-use-case";
 
 const resolver = new Resolver();
 
@@ -41,6 +48,14 @@ resolver.define("deleteAdminGroup", async (context) => {
 
 resolver.define("addAdminGroups", async (context) => {
   return await addAdminGroups(context);
+});
+
+resolver.define("hasUserAdminAccess", async (context) => {
+  return await hasUserAdminAccess(context);
+});
+
+resolver.define("verifyIfAppInitialized", async (context) => {
+  return await verifyIfAppInitialized(context);
 });
 
 export async function runHookDocumentVerify(event, context) {

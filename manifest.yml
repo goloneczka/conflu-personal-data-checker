@@ -29,6 +29,7 @@ resources:
 permissions:
   scopes:
     - read:group:confluence
+    - read:confluence-user
     - read:confluence-content.summary
     - read:page:confluence
     - write:comment:confluence

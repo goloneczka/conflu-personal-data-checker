@@ -8,6 +8,8 @@ import { LogBookContainer } from "./logbook/logbook";
 import { LogBookCard } from "./logbook/logbook-card/logbook-card";
 import { Validator } from "./validator/validator";
 import { Acces } from "./acces/acces";
+import { GeneralErrorRoute } from "./core/protected-route/general-error-route";
+import { ProtectedRoute } from "./core/protected-route/protected-route";
 
 function App() {
   const [history, setHistory] = useState(null);
@@ -46,10 +48,40 @@ function App() {
         <Router navigator={history} navigationType={historyState.action} location={historyState.location}>
           <Routes>
             <Route path="/" element={<Navigate to={Path.LOG_BOOK} />} />
-            <Route path={Path.LOG_BOOK} element={<LogBookContainer />} />
-            <Route path={Path.LOG_BOOK_DETAILS} element={<LogBookCard />} />
-            <Route path={Path.VALIDATOR} element={<Validator />} />
-            <Route path={Path.ACCES} element={<Acces />} />
+
+            <Route
+              path={Path.LOG_BOOK}
+              element={
+                <ProtectedRoute>
+                  <LogBookContainer />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={Path.LOG_BOOK_DETAILS}
+              element={
+                <ProtectedRoute>
+                  <LogBookCard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={Path.VALIDATOR}
+              element={
+                <ProtectedRoute>
+                  <Validator />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={Path.ACCES}
+              element={
+                <ProtectedRoute>
+                  <Acces />
+                </ProtectedRoute>
+              }
+            />
+            <Route path={Path.ERROR} element={<GeneralErrorRoute />} />
           </Routes>
         </Router>
       ) : (
