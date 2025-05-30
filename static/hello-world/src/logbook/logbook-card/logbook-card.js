@@ -32,8 +32,8 @@ export const LogBookCard = () => {
 
   return (
     <div>
-      <h1>LogBook {logbookData.id} details </h1>
-      <p>This is the logbook details page. You can view the details of script and take actions.</p>
+      <h1>Event log {logbookData.id} details </h1>
+      <p>This is the event log details page. You can view the history of given, scaned confluence page.</p>
 
       <div>
         <table className="logbook-table">
@@ -72,7 +72,7 @@ export const LogBookCard = () => {
               {validation.result.map((validationError, idx) => (
                 <div key={idx} className="vulnerability-row">
                   <p style={{ margin: 0 }}>
-                    {validationError.wordsBefore} {validationError.val} {validationError.wordsAfter}
+                    {validationError.wordsBefore} <b>{validationError.val}</b> {validationError.wordsAfter}
                   </p>
                   {logbookData.needAction && (
                     <Button appearance="default" onClick={() => markAsFalsePositive(validation.checkerType, idx)} isDisabled={areButtonsDisabled}>
@@ -86,9 +86,7 @@ export const LogBookCard = () => {
         </div>
 
         <div>
-          <h3>
-            Marked as False Positive: <h5>These values won;t be checked in future for this page</h5>
-          </h3>
+          <h3>Marked as False Positive: </h3> <h6>(These values won't be checked in future for this page)</h6>
           {logbookData.markedAsFalsePositive?.map((validation) => (
             <div key={validation.checkerType}>
               <h5>{validation.checkerType}</h5>
@@ -96,7 +94,7 @@ export const LogBookCard = () => {
               {validation.result.map((validationError, idx) => (
                 <div key={idx} className="vulnerability-row">
                   <p style={{ margin: 0 }}>
-                    {validationError.wordsBefore} {validationError.val} {validationError.wordsAfter}
+                    {validationError.wordsBefore} <b>{validationError.val}</b> {validationError.wordsAfter}
                   </p>
                 </div>
               ))}

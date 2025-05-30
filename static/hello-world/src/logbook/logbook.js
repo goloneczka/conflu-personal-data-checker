@@ -12,7 +12,7 @@ import { invoke } from "@forge/bridge";
 import { ButtonHeader } from "../core/header/button-header";
 
 export const LogBookContainer = () => {
-  const logsPerPage = 5;
+  const logsPerPage = 10;
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -52,7 +52,7 @@ export const LogBookContainer = () => {
   return (
     <div>
       <ButtonHeader activeIndex={0} />
-      <p>This is the logbook page. You can view the history of your actions here.</p>
+      <p>This is the event log page. You can view the history of scaned confluence pages.</p>
 
       <div className="logbook-toolbar">
         <div></div> {/* Empty div for left alignment, can be used for future controls */}

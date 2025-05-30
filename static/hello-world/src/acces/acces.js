@@ -42,7 +42,7 @@ export const Acces = () => {
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <ButtonHeader activeIndex={2} />
-      <p>This is the access page. You can manage user permissions and roles here.</p>
+      <p>This is the access page. You can manage user groups permissions whom has access to this app.</p>
 
       <TagGroup>
         {adminGroups.map((group) => (

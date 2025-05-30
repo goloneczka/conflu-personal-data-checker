@@ -14,7 +14,7 @@ export const Validator = () => {
   return (
     <div>
       <ButtonHeader activeIndex={1} />
-      <p>This is the validator page. You can view the details of script and take actions.</p>
+      <p>This is the validations page. You can view available validators.</p>
 
       <div className="validator-list">
         {validators.map((validator) => (

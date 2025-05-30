@@ -71,8 +71,6 @@ function validateInternationalPhone(number) {
     return /^\+49[\s\-]?[1-9]\d{1,4}[\s\-]?\d{3,5}[\s\-]?\d{3,5}$/.test(number);
   }
 
-  // Kanada (lokalne numery mają ten sam format co USA, prefix +1 sprawdzony wyżej)
-
   // Francja (+33)
   if (number.startsWith("+33")) {
     return /^\+33[\s\-]?[1-9](?:[\s\-]?\d{2}){4}$/.test(number);

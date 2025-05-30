@@ -24,4 +24,5 @@
 
 /* Highlight row when button is hovered */
 .vulnerability-row:has(button:hover) {
-    background: #e0f2fe; }
+    background: #e0f2fe;
+ }

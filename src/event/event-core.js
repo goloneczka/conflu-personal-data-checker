@@ -19,7 +19,17 @@ export const runVerifyPageFacade = async (pageId) => {
   const text = extractTextFromProseMirrorJSON(pageRequestData.body.atlas_doc_format.value);
 
   // 2. check the text for sensitive data
-  let verifyResults = await runCheckersByParams([checkerOption.BANK_CARD, checkerOption.EMAIL, checkerOption.SSN, checkerOption.PHONE_NUMBER], text);
+  let verifyResults = await runCheckersByParams(
+    [
+      checkerOption.BANK_CARD,
+      checkerOption.EMAIL,
+      checkerOption.SSN,
+      checkerOption.PHONE_NUMBER,
+      checkerOption.DRIVER_LICENSE,
+      checkerOption.IP_ADDRESS,
+    ],
+    text
+  );
   console.log("st verify results", verifyResults);
 
   // 3a. get last version and status of the page validation

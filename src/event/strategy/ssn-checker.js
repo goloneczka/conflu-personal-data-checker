@@ -25,7 +25,7 @@ export const SSNTextChecker = async (text) => {
     const group = parseInt(ssn.substring(3, 5), 10);
     const serial = parseInt(ssn.substring(5, 9), 10);
     if (isValidSSN(area, group, serial)) {
-      foundSSNs.push({ match: full, index: match.index });
+      foundSSNs.push({ match: ssn, index: match.index });
     }
   }
 

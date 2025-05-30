@@ -9,7 +9,6 @@ export const getLogBooksForPage = async (context) => {
   for (let i = 1; i < payload.page; i++) {
     historyLogsWrapper = await fetchLogsHistoryByPage(payload.size, payload.onlyActionNeeded, historyLogsWrapper.nextCursor);
   }
-  console.log("historyLogsWrapper", historyLogsWrapper);
   return historyLogsWrapper.results.map((item) => ({
     ...item.value,
     timestamp: item.key.split("-")[0],
@@ -67,5 +66,5 @@ export const countAllLogBooks = async (context) => {
     historyLogsWrapper = await fetchLogsHistoryByPage(99, payload.onlyActionNeeded, historyLogsWrapper.nextCursor);
     sumOfRows += historyLogsWrapper.results.length;
   }
-  return parseInt(sumOfRows / payload.size) + 1;
+  return Math.max(1, Math.ceil(sumOfRows / payload.size));
 };
