@@ -5,7 +5,7 @@ modules:
       resolver:
         function: resolver
       title: c-personal-data-checker
-      route: hello-world
+      route: personal-data-checker
   trigger:
     - key: verify-doc-personal-data
       function: hook-verify-document

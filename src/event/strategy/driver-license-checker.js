@@ -4,12 +4,17 @@ import { findWordsAroundNew } from "./shared/words-around-merger";
 export const driverLicenseTextChecker = async (text) => {
   const matchesWithIndex = [];
 
+  const seen = new Set();
+
   for (const config of Object.values(regexes)) {
     const matches = text.matchAll(config.pattern);
     for (const match of matches) {
       const raw = match[0];
       const cleaned = raw.replace(/\s/g, "");
-      if (config.validate(cleaned)) {
+      const uniqueKey = `${match.index}-${cleaned}`;
+
+      if (config.validate(cleaned) && !seen.has(uniqueKey)) {
+        seen.add(uniqueKey);
         matchesWithIndex.push({
           match: raw,
           index: match.index,
