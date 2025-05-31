@@ -33,9 +33,10 @@ export const LogBookCard = () => {
   return (
     <div>
       <h1>Event log {logbookData.id} details </h1>
-      <p>This is the event log details page. You can view the history of given, scaned confluence page.</p>
+      <p>This is the event log details page. You can view the result of the scanned Confluence page.</p>
+      <p>Mark as false positive (FP) when the text has been misqualified. </p>
 
-      <div>
+      <div style={{ marginTop: "20px" }}>
         <table className="logbook-table">
           <thead>
             <tr>
@@ -76,7 +77,7 @@ export const LogBookCard = () => {
                   </p>
                   {logbookData.needAction && (
                     <Button appearance="default" onClick={() => markAsFalsePositive(validation.checkerType, idx)} isDisabled={areButtonsDisabled}>
-                      MaFP
+                      Mark as FP
                     </Button>
                   )}
                 </div>

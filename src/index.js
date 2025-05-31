@@ -15,38 +15,47 @@ import {
 const resolver = new Resolver();
 
 resolver.define("getLogbookDataById", async (context) => {
+  console.debug("method getLogbookDataById, params:", context?.payload);
   return await getLogBookById(context);
 });
 
 resolver.define("getLogBooksForPage", async (context) => {
+  console.debug("method getLogBooksForPage, params:", context?.payload);
   return await getLogBooksForPage(context);
 });
 
 resolver.define("markAsFalsePositive", async (context) => {
+  console.debug("method markAsFalsePositive, params:", JSON.stringify(context?.payload));
   return await markAsFalsePositive(context);
 });
 
 resolver.define("countAllLogBooks", async (context) => {
+  console.debug("method countAllLogBooks");
   return await countAllLogBooks(context);
 });
 
 resolver.define("fetchValidationTypes", async (context) => {
+  console.debug("method fetchValidationTypes");
   return await fetchValidationTypes(context);
 });
 
 resolver.define("fetchAdminGroups", async (context) => {
+  console.debug("method fetchAdminGroups");
   return await fetchAdminGroups(context);
 });
 
 resolver.define("fetchAttlasianGroups", async (context) => {
+  console.debug("method fetchAttlasianGroups");
   return await fetchAllAttlasianGroups(context);
 });
 
 resolver.define("deleteAdminGroup", async (context) => {
+  console.debug("method deleteAdminGroup, params:", context?.payload);
   return await deleteAdminGroup(context);
 });
 
 resolver.define("addAdminGroups", async (context) => {
+  console.debug("method addAdminGroups, params:", context?.payload);
   return await addAdminGroups(context);
 });
 
@@ -55,6 +64,7 @@ resolver.define("hasUserAdminAccess", async (context) => {
 });
 
 resolver.define("verifyIfAppInitialized", async (context) => {
+  console.debug("method verifyIfAppInitialized");
   return await verifyIfAppInitialized(context);
 });
 

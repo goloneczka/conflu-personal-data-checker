@@ -12,6 +12,7 @@ import { substractValidationByFalsePositive } from "./utils/validation-errors-he
 
 export const runVerifyPageFacade = async (pageId) => {
   // 1a. fetch the page content
+  console.debug("verifaction script started! ...");
   const pageRequestResponse = await api.asApp().requestConfluence(route`/wiki/api/v2/pages/${pageId}?body-format=atlas_doc_format`);
   const pageRequestData = await pageRequestResponse.json();
 
@@ -30,19 +31,17 @@ export const runVerifyPageFacade = async (pageId) => {
     ],
     text
   );
-  console.log("st verify results", verifyResults);
+  console.debug("text scaned! ...");
 
   // 3a. get last version and status of the page validation
   const currentValidationForPage = await getLastValidationResults(pageId);
-  console.log("currentValidationForPage", currentValidationForPage);
 
   // 3b. get all marked as false positive for the page
   const markedAsFalsePositive = await getAllMarkedAsFalsePositiveForPage(pageId);
-  console.log("markedAsFalsePositive", markedAsFalsePositive);
+  console.debug("fetched data for previous validation for page! ...");
 
   // 4. clear the results from false positives
   verifyResults = substractValidationByFalsePositive(verifyResults, markedAsFalsePositive);
-  console.log("nd verify results", verifyResults);
 
   // 5. send a comment if neccessary
   const potentialCommentRequest = prepareNewCommentIfNeccesary(pageId, verifyResults, currentValidationForPage);
@@ -51,6 +50,7 @@ export const runVerifyPageFacade = async (pageId) => {
     const responseNewComment = await api.asApp().requestConfluence(route`/wiki/api/v2/footer-comments`, potentialCommentRequest);
     newCommentResponseId = (await responseNewComment.json()).id;
   }
+  console.debug("Comment prepared and sent if neccessary! ...");
 
   // 6. create new history entry with the new validation results
   const updatedValidationForPage = await createPageValidationNewResults(
@@ -63,5 +63,6 @@ export const runVerifyPageFacade = async (pageId) => {
 
   // 7.update previous validation comment
   await updatePreviousPageValidationComment(currentValidationForPage.id);
+  console.debug("Script finished successfully!");
   return true;
 };
