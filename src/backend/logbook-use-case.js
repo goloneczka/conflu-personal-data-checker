@@ -41,7 +41,7 @@ export const markAsFalsePositive = async (context) => {
   if (totalErrorsNow === 0) {
     row.value.comment = "All errors marked as FP";
     await updateLogHistoryPage(row.key, row.value);
-    runVerifyPageFacade(row.value.confluencePageId);
+    await runVerifyPageFacade(row.value.confluencePageId);
   } else {
     await updateLogHistoryPage(row.key, row.value);
   }

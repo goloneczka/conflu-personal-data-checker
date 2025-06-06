@@ -22,12 +22,10 @@ export const LogBookCard = () => {
 
   const markAsFalsePositive = async (checkerType, id) => {
     setAreButtonsDisabled(true);
-    await invoke("markAsFalsePositive", { logbookId: logbookData.id, checkerType: checkerType, validationErrorIdPerCherkerType: id }).then(
-      (newLogBook) => {
-        setlogbookData(newLogBook);
-        setAreButtonsDisabled(false);
-      }
-    );
+    invoke("markAsFalsePositive", { logbookId: logbookData.id, checkerType: checkerType, validationErrorIdPerCherkerType: id }).then((newLogBook) => {
+      setlogbookData(newLogBook);
+      setAreButtonsDisabled(false);
+    });
   };
 
   return (
